@@ -4,8 +4,8 @@
       <a href="" class=" text-black text-xl font-black rounded-lg border-2 px-2 border-solid border-black">AppOIMENTmE</a>
     </div>
       <div class=" px-9 py-2">
-        <a href="" class=" px-3">LOGIN</a>
-        <a href="" class=" px-3">SIGN UP</a>
+        <button  class=" px-3 hover:text-gray-500 focus:outline-none " @click="$emit('open-login')">LOGIN</button>
+        <button  class=" px-3 hover:text-gray-500 focus:outline-none"  @click="$emit('open-signup')">SIGN UP</button>
       </div>
   </nav>
 </template>
