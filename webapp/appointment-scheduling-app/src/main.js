@@ -11,7 +11,8 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 import './index.css'
 import './assets/tailwind.css'
 import './assets/homepage.css'
-
+import './assets/about.css'
+import router from './router'
 
 
 const app=createApp(App)

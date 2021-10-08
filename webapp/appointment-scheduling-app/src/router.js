@@ -1,6 +1,8 @@
 import {createRouter,createWebHistory} from 'vue-router'
 
 import HomePage from './pages/HomePage.vue'
+import aboutUs from './pages/aboutUs.vue'
+
 import AddServicePage from './pages/AddServicePage'
 import DashboardPage from './pages/DashboardPage'
 import FindServicePage from './pages/FindServicePage'
@@ -15,6 +17,8 @@ const routes=[
     { path: '/find-service', component: FindServicePage,},
     { path: '/open-link', component: OpenLinkPage,},
     { path: '/sheduled-appoiments', component: SheduledAppoimentsPage,},
+    { path: '/', component: aboutUs },
+
 ]
 
 const router = new createRouter({
