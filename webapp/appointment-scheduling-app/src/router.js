@@ -17,7 +17,7 @@ const routes=[
     { path: '/find-service', component: FindServicePage,},
     { path: '/open-link', component: OpenLinkPage,},
     { path: '/sheduled-appoiments', component: SheduledAppoimentsPage,},
-    { path: '/', component: aboutUs },
+    { path: '/about', component: aboutUs },
 
 ]
 
