@@ -46,6 +46,7 @@ video{
     padding-top: 0.2em;
     padding-bottom: 0.2em;
     margin: 0.7em;
+    outline: none;
 }
 
 .btn-outline{

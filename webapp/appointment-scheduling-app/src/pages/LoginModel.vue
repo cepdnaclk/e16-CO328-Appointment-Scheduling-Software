@@ -24,6 +24,7 @@
 <script>
     import BlueModal from '../components/BlueModal.vue'
     import axios from 'axios'
+
     export default {
         components:{
             BlueModal,
@@ -36,6 +37,9 @@
         },
         methods:{
             login(){ 
+                this.$cookies.set("user_token","25j_7Sl6xDq2Kc3ym0fmrSSk2xV2XkUkX")
+                this.$store.commit('setLogedIn')
+                this.$emit('close-login')
                 if(this.email==="" || this.password===""){
                     this.$notify({
                     group: "generic",
@@ -50,6 +54,10 @@
                         password:this.password
                     })
                     .then( (response) =>{
+                        
+                        this.$store.commit('setLogedIn')
+                        this.$cookies.set("user_token",response.headers['Authorization'])
+                        this.$emit('close-login')
                         loader.hide()
                         console.log(response);
                     })
