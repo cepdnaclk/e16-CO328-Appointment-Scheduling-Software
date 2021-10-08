@@ -1,6 +1,7 @@
 <template>
   <AppHeaderVue @open-login="isOpenLogin=true" @open-signup="isOpenSignup=true"/>
   <router-view/>
+  <footerVue />
   <LoginModal @close-login="isOpenLogin=false" v-if="isOpenLogin"/>
   <SignupModal @close-signup="isOpenSignup=false" v-if="isOpenSignup"/>
   <NotificationGroup group="error">
@@ -84,13 +85,16 @@
 
 <script>
 import AppHeaderVue from './components/AppHeader.vue'
+import footerVue from './components/footer.vue'
 import LoginModal from './pages/LoginModel.vue'
 import SignupModal from './pages/SignUpModel.vue'
+
 export default {
  components:{
    AppHeaderVue,
    LoginModal,
-   SignupModal
+   SignupModal,
+   footerVue
  },
  data(){
    return{
