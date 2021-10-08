@@ -54,6 +54,7 @@
         },
         methods:{
           signup(){
+            
             if(this.password!==this.repassword){
               this.$notify({
               group: "generic",
@@ -72,13 +73,22 @@
                     
             }else{
               let loader = this.$loading.show();
-              axios.post('login', {
+              axios.post('signup', {
                   email: this.email,
-                  password:this.password
+                  password:this.password,
+                  fristName:this.fristName,
+                  lastName:this.lastName
+
               })
-                    .then( (response) =>{
+              .then( (response) =>{
                   loader.hide()
                   console.log(response);
+                  this.$emit('close-signup')
+                  this.$notify({
+                  group: "done",
+                  title: "Done ",
+                  text: "Signup completed!"
+                  }, 4000);
               })
               .catch(function (error) {
                   loader.hide()
