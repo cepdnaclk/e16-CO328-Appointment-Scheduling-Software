@@ -13,7 +13,9 @@
         <button className="btn btn-outline">FIND SERVICE</button>
         <!-- </Link> -->
         <!-- <Link to="/about"> -->
+        <router-link to="/page2">
         <button className="btn btn-solid">ABOUT US</button>
+        </router-link>
         <!-- </Link> -->
       </div>
     </div>
