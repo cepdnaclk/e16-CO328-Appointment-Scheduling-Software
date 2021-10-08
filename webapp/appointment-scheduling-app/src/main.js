@@ -10,10 +10,8 @@ import store from './store/index'
 import 'vue-loading-overlay/dist/vue-loading.css';
 import './index.css'
 import './assets/tailwind.css'
-import './assets/homepage.css'
-import './assets/about.css'
-import router from './router'
 
+//import './assets/homepage.css'
 
 const app=createApp(App)
 app.use(router)
