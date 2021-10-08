@@ -26,5 +26,5 @@ export default {
 </script>
 
 <style>
-
+@import url('../assets/homepage.css');
 </style>

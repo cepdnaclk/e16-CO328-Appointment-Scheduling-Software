@@ -1,6 +1,7 @@
 <template>
   <AppHeaderVue @open-login="isOpenLogin=true" @open-signup="isOpenSignup=true"/>
   <router-view/>
+  <Footer/>
   <LoginModal @close-login="isOpenLogin=false" v-if="isOpenLogin"/>
   <SignupModal @close-signup="isOpenSignup=false" v-if="isOpenSignup"/>
   <NotificationGroup group="error">
@@ -126,13 +127,15 @@ import AppHeaderVue from './components/AppHeader.vue'
 import LoginModal from './pages/LoginModel.vue'
 import SignupModal from './pages/SignUpModel.vue'
 import FloatingButton from './components/FloatingButton.vue'
+import Footer from './components/footer.vue'
 
 export default {
  components:{
    AppHeaderVue,
    LoginModal,
    SignupModal,
-   FloatingButton
+   FloatingButton,
+   Footer
  },
  data(){
    return{

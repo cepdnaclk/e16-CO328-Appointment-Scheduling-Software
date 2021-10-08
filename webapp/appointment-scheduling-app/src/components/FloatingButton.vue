@@ -37,10 +37,14 @@
       setClient(){
         this.$store.commit('setClient')
         this.$cookies.set("user_type","Clint")
+        this.$router.push('/')
+        this.show=!this.show
       },
       setServiceProvider(){
         this.$store.commit('setServiceProvider')
         this.$cookies.set("user_type","SP")
+        this.$router.push('/')
+        this.show=!this.show
       }
     }
  }
