@@ -126,8 +126,6 @@
 import AppHeaderVue from './components/AppHeader.vue'
 import LoginModal from './pages/LoginModel.vue'
 import SignupModal from './pages/SignUpModel.vue'
-
-import AboutUs from './pages/aboutUs.vue'
 import FloatingButton from './components/FloatingButton.vue'
 import Footer from './components/footer.vue'
 
