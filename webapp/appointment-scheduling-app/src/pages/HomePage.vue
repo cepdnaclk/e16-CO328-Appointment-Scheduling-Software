@@ -1,5 +1,5 @@
 <template>
-      <div className="main-container">
+    <div className="main-container">
       <video
         src="../assets/Doctors.mp4"
         autoplay="true"

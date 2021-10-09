@@ -30,5 +30,5 @@
 </script>
 
 <style>
-@import url('../assets/about.css')
+@import url('../assets/about.css');
 </style>

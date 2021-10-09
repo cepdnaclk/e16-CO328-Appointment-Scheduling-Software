@@ -1,6 +1,6 @@
 <template>
     <div class="bg-linear-pink-invert pb-12">
-        <div class="mx-auto container pt-20 lg:pt-72 flex flex-col items-center justify-center">
+        <div class="mx-auto container pt-20 flex flex-col items-center justify-center">
            
             <div class="text-black flex flex-col md:items-center f-f-l pt-3">
                 <h1 class="text-2xl font-white">AppOINTMENTmE</h1>
