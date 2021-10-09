@@ -1,0 +1,38 @@
+
+.container-bar{
+  padding-top: 12%;
+  width: 100%;
+  height: 70%;
+  background-image: url('../assets/back2.jpg');
+  background-repeat :no-repeat;
+  background-size: cover;
+  padding-bottom: 10%;
+  text-align: center;
+}
+.searchbutton{
+  height: 3%;
+  display: inline-block;
+  
+}
+.input-tab{
+  height: 3%;
+}
+.button-s{
+  height: 3%;
+  width: 100px;
+  background-color: #e22b53;
+  border: none;
+  color: white;
+  padding-top:17px;
+  padding-bottom:17px;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  border-radius: 12px;
+  font-weight: bold;
+  
+}
