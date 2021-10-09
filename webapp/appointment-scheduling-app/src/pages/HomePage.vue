@@ -1,5 +1,5 @@
 <template>
-      <div className="main-container">
+    <div className="main-container">
       <video
         src="../assets/Doctors.mp4"
         autoplay="true"
@@ -13,7 +13,7 @@
         <button className="btn btn-outline">FIND SERVICE</button>
         <!-- </Link> -->
         <!-- <Link to="/about"> -->
-        <router-link to="/page2">
+        <router-link to="/about">
         <button className="btn btn-solid">ABOUT US</button>
         </router-link>
         <!-- </Link> -->

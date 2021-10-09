@@ -16,5 +16,5 @@
 </script>
 
 <style>
-
+@import url('../assets/about.css');
 </style>
