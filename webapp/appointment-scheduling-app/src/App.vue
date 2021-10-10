@@ -156,7 +156,6 @@ export default {
  beforeCreate(){
    if (this.$cookies.isKey("user_token")) {
      this.$store.commit('setLogedIn')
-     console.log(this.$store.state)
      if (this.$cookies.get("user_type")==="SP") {
        this.$store.commit('setServiceProvider')
        

@@ -1,5 +1,5 @@
  <template>
-    <BlueModal eventName="close-signup" customClases="bg-blue-100">
+    <BlueModal eventName="close-signup" customClases="bg-blue-100 m-auto">
    <div class="p-2">
     <h1 class="font-black text-center antialiased ">SIGN UP</h1>
     <form @submit.prevent="signup">
