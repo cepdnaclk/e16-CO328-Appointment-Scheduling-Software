@@ -34,9 +34,9 @@
                   <VueTimepicker class=" rounded shadow-md p-2 w-full border border-transparent focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent mx-2" :format="yourFormat" v-model="element.startTime"></VueTimepicker>
                   <VueTimepicker class=" rounded shadow-md p-2 w-full border border-transparent focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent mx-2" :format="yourFormat" v-model="element.endTime" ></VueTimepicker>
                   <div class="w-auto h-auto">
-                    <div class="flex-1 h-full">
+                    <div class="flex-1 h-full" @click="deleteSlot(element.id)">
                        <div class="flex items-center justify-center flex-1 h-full p-2 bg-red-500 text-white shadow rounded-lg hover:bg-red-300">
-                     <div class="relative" @click="deleteSlot(element.id)">
+                     <div class="relative" >
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" >
                         <path d="M18.693,3.338h-1.35l0.323-1.834c0.046-0.262-0.027-0.536-0.198-0.739c-0.173-0.206-0.428-0.325-0.695-0.325
                         H3.434c-0.262,0-0.513,0.114-0.685,0.312c-0.173,0.197-0.25,0.46-0.215,0.721L2.79,3.338H1.307c-0.502,0-0.908,0.406-0.908,0.908
@@ -81,7 +81,7 @@
  </template>
  
  <script>
- 
+  import axios from 'axios'
   import VueTimepicker from 'vue3-timepicker/src/VueTimepicker.vue'
   import { defineComponent } from 'vue'
   import { VueDraggableNext } from 'vue-draggable-next'
@@ -135,17 +135,63 @@
             mm: '05',
             ss: '00',
             a: 'am'
-          }, id: 1 
+          }, id: this.id
         })
       },
 
       addNewService(){
-        console.log(this.list)
-        console.log(this.serviceName)
-        console.log(this.serviceDiscription)
-        console.log(this.serviceType)
-        console.log(this.list)
-      },
+                if(this.serviceName==="" || this.serviceDiscription===""){
+                    this.$notify({
+                    group: "generic",
+                    title: "Required ",
+                    text: "Service name and discription are required!"
+                    }, 4000)
+                    
+                }else{
+                    let loader = this.$loading.show();
+                    axios.post('addNewService', {
+                        timeSlots:this.list,
+                        serviceName:this.serviceName,
+                        serviceDiscription:this.serviceDiscription,
+                        erviceType:this.serviceType
+
+                    },{
+                    headers: {
+                      'Authorization': this.$cookies.get("user_token")
+                    }
+                    }).then( (response) =>{
+                        loader.hide()
+                        this.$notify({
+                        group: "done",
+                        title: "Done ",
+                        text: "New Service Added!"
+                        }, 4000);
+                        this.$router.push('/dash-board')
+                        console.log(response);
+                    }).catch(function (error) {
+                        loader.hide()
+                        
+                        if (error.response && error.response.status==403) {
+                            this.$cookies.remove("user_token")
+                            this.$cookies.remove("user_type")
+                            this.$notify({
+                             group: "generic",
+                            title: "Session Expires ",
+                            text: "Session Expired pleace login"
+                            }, 4000)
+                            this.$store.commit('setLogedOut')
+                            this.$router.push('/')
+                        } else {
+                            this.$notify({
+                            group: "error",
+                            title: "Error",
+                            text: "Something happened in setting up the request that triggered a Error!",
+                            }, 4000)
+                        }
+
+                    });
+                  }
+       },
 
       deleteSlot(id){
         console.log(id)

@@ -4,9 +4,11 @@
   <Footer/>
   <LoginModal @close-login="isOpenLogin=false" v-if="isOpenLogin"/>
   <SignupModal @close-signup="isOpenSignup=false" v-if="isOpenSignup"/>
+
   <NotificationGroup group="error">
     <div
-      class="fixed inset-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none z-40"
+      class="fixed inset-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none "
+      style="z-index:111"
     >
       <div class="w-full max-w-sm">
         <Notification
@@ -45,7 +47,8 @@
 
   <NotificationGroup group="generic">
     <div
-      class="fixed inset-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none  z-40"
+      class="fixed inset-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none  "
+      style="z-index:111"
     >
       <div class="w-full max-w-sm">
         <Notification
@@ -83,7 +86,8 @@
 </NotificationGroup>
   <NotificationGroup group="done">
     <div
-      class="fixed inset-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none  z-40"
+      class="fixed inset-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none  "
+      style="z-index:111"
     >
       <div class="w-full max-w-sm">
         <Notification
@@ -129,13 +133,14 @@ import SignupModal from './pages/SignUpModel.vue'
 import FloatingButton from './components/FloatingButton.vue'
 import Footer from './components/footer.vue'
 
+
 export default {
  components:{
    AppHeaderVue,
    LoginModal,
    SignupModal,
    FloatingButton,
-   Footer
+   Footer,
  },
  data(){
    return{

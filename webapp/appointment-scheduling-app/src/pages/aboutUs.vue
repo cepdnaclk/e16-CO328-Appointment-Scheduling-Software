@@ -29,6 +29,6 @@
   }
 </script>
 
-<style>
+<style scoped>
 @import url('../assets/about.css');
 </style>

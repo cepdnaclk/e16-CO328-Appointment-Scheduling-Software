@@ -14,8 +14,8 @@ import './assets/tailwind.css'
 //import './assets/homepage.css'
 
 const app=createApp(App)
-app.use(router)
 app.use(store)
+app.use(router)
 app.use(Loading)
 app.use(VueCookies,{
     expireTimes: 60 * 60 * 24 * 0.5,

@@ -4,6 +4,7 @@ const store =createStore({
     state :{
             isLogged:false,
             isClient:false,
+            dashboardAlert:false
     },
     mutations:{
         setLogedIn(state){
@@ -17,6 +18,12 @@ const store =createStore({
         },
         setServiceProvider(state){
             state.isClient=false;
+        },
+        setDashBoardAlert(state){
+            state.dashboardAlert=true
+        },
+        removeDashBoardAlert(state){
+            state.dashboardAlert=false
         }
     }
 });
