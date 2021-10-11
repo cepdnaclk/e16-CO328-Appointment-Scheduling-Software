@@ -6,7 +6,7 @@
   </div>
   <Alert v-if="isDeleteAlertShowing" message="Do you want to delete this service ?" heading="Delete" redButtonLabel="Delete" whiteButtonLabel="Cancel" :redButtonFunc="()=>confirmDelete()" :whiteButtonFunc="()=>cancelDelete()"/>
   <Alert v-if="isExpiredAlertShowing" message="Your service expired,Do you want to Remove this service ?" heading="Remove" redButtonLabel="Remove" whiteButtonLabel="Cancel" :redButtonFunc="()=>confirmExpiredDelete()" :whiteButtonFunc="()=>cancelExpiedDelete()"/>
-  <AppoimentModal  @close-appoimentmodel="closeAppoimentModel" />
+  <AppoimentModal v-if="appoimentModelOpen" :dayDataList="dayDataList" @close-appoimentmodel="closeAppoimentModel" :selecteServiceID="selecteServiceID"/>
  </template>
  
  <script>
@@ -22,6 +22,9 @@
     },
     isExpiredAlertShowing(){
       return this.$store.state.dashboardAlertExpired
+    },
+    appoimentModelOpen(){
+      return this.$store.state.appoimentModal
     }
   },
   components:{
@@ -51,7 +54,68 @@
          "serviceId":'0000000',
         }
       ],
-      deletingID:""
+      deletingID:"",
+      selecteServiceID:"",
+      dayDataList:[
+        {
+          date:"2021-11-11",
+          slotList:[
+            {
+              slotId:1,
+              time:"11:00:00-12:00:00 am",
+              clientName:"Supun",
+              clientEmail:"Supun@email",
+              clientRequested:false,
+              approved:false,
+            },
+            {
+              slotId:2,
+              time:"11:00:00-12:00:00 am",
+              clientName:"Supun",
+              clientEmail:"Supun@email",
+              clientRequested:true,
+              approved:false,
+            },
+            {
+              slotId:3,
+              time:"11:00:00-12:00:00 am",
+              clientName:"Supun",
+              clientEmail:"Supun@email",
+              clientRequested:true,
+              approved:true,
+            }
+          ]
+        },
+        {
+          date:"2021-11-11",
+          slotList:[
+            {
+              slotId:1,
+              time:"11:00:00-12:00:00 am",
+              clientName:"Supun",
+              clientEmail:"Supun@email",
+              clientRequested:false,
+              approved:false,
+            },
+            {
+              slotId:2,
+              time:"11:00:00-12:00:00 am",
+              clientName:"Supun",
+              clientEmail:"Supun@email",
+              clientRequested:true,
+              approved:false,
+            },
+            {
+              slotId:3,
+              time:"11:00:00-12:00:00 am",
+              clientName:"Supun",
+              clientEmail:"Supun@email",
+              clientRequested:true,
+              approved:true,
+            }
+          ]
+        }
+      ]
     }
   },
   methods:{
@@ -71,15 +135,20 @@
 
 
     getDetail(id){
-      let data=getDataFromApiPOST(this,'getDetailService',{serviceID:id},"","",'',false,false)
+      console.log(id)
+      this.$store.commit('setAppoimentModal')
+      this.selecteServiceID=id
+      /*
+      let data = getDataFromApiPOST(this,'getDetailService',{serviceID:id},"","",'',false,false)
       if(data.length==0){
         this.deletingID=id
         this.$store.commit('setDashBoardExpiredAlert')
         return
       }else{
-
+        this.dayDataList=data
         this.$store.commit('setAppoimentModal')
       }
+      */
       
     },
 
