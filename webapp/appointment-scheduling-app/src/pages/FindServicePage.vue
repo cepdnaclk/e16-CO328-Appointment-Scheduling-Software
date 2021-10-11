@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import card from '../components/Card.vue'
+import card from '../components/CardClient.vue'
 export default {
   components:{
     card
