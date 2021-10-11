@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export  function getDataFromApiPOST(obj,url,data,doneTitle,doneText,pushLink) {
+export  function getDataFromApiPOST(obj,url,data,doneTitle,doneText,pushLink,redirect,doneNotification) {
     let loader = obj.$loading.show();
       axios.post(url, data,{
           
@@ -9,14 +9,19 @@ export  function getDataFromApiPOST(obj,url,data,doneTitle,doneText,pushLink) {
           }
       }).then( (response) =>{
           loader.hide()
-          obj.$notify({
-          group: "done",
-          title: doneTitle,
-          text: doneText
-          }, 4000);
-        obj.$router.push(pushLink)
-        console.log(response);
-        return response.data
+          if (doneNotification) {
+            obj.$notify({
+              group: "done",
+              title: doneTitle,
+              text: doneText
+              }, 4000); 
+          }
+          if (redirect) {
+            obj.$router.push(pushLink)
+          }else{
+            return response.data
+          }
+         
       }).catch(function (error) {
          loader.hide()
           if (error.response && error.response.status==403) {
@@ -40,7 +45,7 @@ export  function getDataFromApiPOST(obj,url,data,doneTitle,doneText,pushLink) {
     });
 }
 
-export  function getDataFromApiGET(obj,url,doneTitle,doneText,pushLink) {
+export  function getDataFromApiGET(obj,url,doneTitle,doneText,pushLink,redirect,doneNotification) {
   let loader = obj.$loading.show();
     axios.get(url,{
         
@@ -49,14 +54,19 @@ export  function getDataFromApiGET(obj,url,doneTitle,doneText,pushLink) {
         }
     }).then( (response) =>{
         loader.hide()
-        obj.$notify({
-        group: "done",
-        title: doneTitle,
-        text: doneText
-        }, 4000);
-      obj.$router.push(pushLink)
-      console.log(response);
-      return response.data
+        if (doneNotification) {
+          obj.$notify({
+          group: "done",
+          title: doneTitle,
+          text: doneText
+          }, 4000); 
+        }
+        
+        if (redirect) {
+          obj.$router.push(pushLink)
+        }else{
+          return response.data
+        }
     }).catch(function (error) {
        loader.hide()
         
