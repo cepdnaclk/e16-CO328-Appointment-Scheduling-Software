@@ -11,7 +11,7 @@
                        {{serviceDiscription}}
                         </p>
                     </div>
-                    <button class="w-full mt-6 mb-3 py-2 text-white font-semibold bg-purple-400 hover:shadow-xl duration-200 hover:bg-purple-800">Check Now</button>
+                    <button class="w-full mt-6 mb-3 py-2 text-white font-semibold bg-purple-400 hover:shadow-xl duration-200 hover:bg-purple-800" @click="checkNow">Check Now</button>
      </div>
     </div>
  </template>
@@ -25,6 +25,7 @@
         "serviceDiscription",
         "serviceType",
         "serviceId",
+        "checkNow"
     ],
 
  }

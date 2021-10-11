@@ -4,7 +4,9 @@ const store =createStore({
     state :{
             isLogged:false,
             isClient:false,
-            dashboardAlert:false
+            dashboardAlert:false,
+            appoimentModal:false,
+            dashboardAlertExpired:false
     },
     mutations:{
         setLogedIn(state){
@@ -24,7 +26,20 @@ const store =createStore({
         },
         removeDashBoardAlert(state){
             state.dashboardAlert=false
-        }
+        },
+        setAppoimentModal(state){
+            state.appoimentModal=true
+        },
+        removeAppoimentModal(state){
+            state.appoimentModal=false
+        },
+        setDashBoardExpiredAlert(state){
+            state.dashboardAlertExpired=true
+        },
+        removeDashBoardExpiredAlert(state){
+            state.dashboardAlertExpired=false
+        },
+        
     }
 });
 
