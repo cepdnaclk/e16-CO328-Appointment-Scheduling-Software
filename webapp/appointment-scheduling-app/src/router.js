@@ -8,6 +8,7 @@ import DashboardPage from './pages/DashboardPage'
 import FindServicePage from './pages/FindServicePage'
 import OpenLinkPage from './pages/OpenLinkPage'
 import SheduledAppoimentsPage from './pages/SheduledAppoimentsPage'
+//import ClientDashboardPage from './pages/ClientDashboard'
 
 function authCheck(to, from,next){
 
@@ -27,6 +28,7 @@ const routes=[
     { path: '/open-link', component: OpenLinkPage,beforeEnter: authCheck},
     { path: '/sheduled-appoiments', component: SheduledAppoimentsPage,beforeEnter: authCheck},
     { path: '/about', component: AboutUs },
+    //{ path: '/open-dash', component: ClientDashboardPage },
 
 
 ]
