@@ -8,7 +8,7 @@
                         <button  class="p-2 hover:shadow-lg text-xs font-thin m-1  outline-none " @click="approveBtnFunc" :class="approveDisable">
                             {{approveBtnText}}
                         </button>
-                        <button href="#" class="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin m-1 hover:bg-white hover:text-red-500 outline-none" @click="removeFunc">Remove</button>
+                        <button href="#" class=" p-2  hover:shadow-lg text-xs font-thin m-1  outline-none" @click="removeBtnFunc" :class="removeDisable">Remove</button>
                     </td>
     </tr>
  </template>
@@ -35,7 +35,7 @@
           }
       },
       approveDisable(){
-          if(this.clientRequested && this.approved){
+          if((this.clientRequested && this.approved)|| !this.clientRequested){
               return "bg-gray-500 text-black"
           }else{
               return "bg-blue-500  text-white hover:bg-white hover:text-blue-500"
@@ -49,11 +49,25 @@
           }
       },
       approveBtnFunc(){
-         if(this.clientRequested && this.approved){
+         if((this.clientRequested && this.approved)|| !this.clientRequested){
              return null
          } else{
              return this.approveFunc
          }
+      },
+      removeDisable(){
+          if(!this.clientRequested){
+              return "bg-gray-500 text-black"
+          }else{
+              return "bg-red-500 text-white hover:bg-white hover:text-red-500"
+          }
+      },
+      removeBtnFunc(){
+          if(!this.clientRequested){
+              return null
+          }else{
+              return this.removeFunc
+          }
       }
   }
  }

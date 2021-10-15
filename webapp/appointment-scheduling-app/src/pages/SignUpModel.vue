@@ -19,6 +19,11 @@
           placeholder="Enter Your Email" v-model.trim="email">
         </div>
         <div class="my-4">
+          <label for="" class=" pb-20">WhatsAPP Number</label>
+          <input type="tel" class=" rounded shadow-md p-2 w-full border border-transparent focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
+          placeholder="Enter Your WhatsAPP No" v-model.trim="phone">
+        </div>
+        <div class="my-4">
           <label for="" class=" pb-20">Password</label>
           <input type="password" class=" rounded shadow-md p-2 w-full border border-transparent focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
           placeholder="Enter Your Password" v-model.trim="password">
@@ -50,6 +55,7 @@
             password:"",
             repassword:"",
             email:"",
+            phone:""
           }
         },
         methods:{
@@ -77,7 +83,8 @@
                   email: this.email,
                   password:this.password,
                   fristName:this.fristName,
-                  lastName:this.lastName
+                  lastName:this.lastName,
+                  phoneNo:this.phone
 
               })
               .then( (response) =>{

@@ -6,10 +6,12 @@
         </div>
     </div>
     <div class="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-      <div v-for="(ele,index) in services" :key="index" class=" m-2" @dblclick="()=>deleteService(ele.serviceId)">
-       <card :serviceDiscription="ele.serviceDiscription" :serviceType="ele.serviceType" :serviceName="ele.serviceName" :serviceId="ele.serviceId" :checkNow="()=>getDetail(ele.serviceId)"/>
-      </div>  
-      <AppoimentModal v-if="appoimentModelOpen" :dayDataList="dayDataList" @close-appoimentmodel="closeAppoimentModel" :selecteServiceID="selecteServiceID"/>
+    <card serviceDiscription="bbbbbbbb" serviceId="000" serviceName="aseddddmm" serviceType="Monthly"/>
+    <card />
+    <card />
+    <card />
+    <card />
+    <card />
     </div>
   
 </template>
