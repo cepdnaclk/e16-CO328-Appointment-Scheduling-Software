@@ -2,9 +2,9 @@ package models
 
 type SignupUser struct{
 	FristName string  `json:"fristName"`
-	LastName string  `json:"lastLame"`
+	LastName string  `json:"lastName"`
 	Email string  `json:"email"`
-	WhatsAppNo string `json:"whatsappNo"`
+	WhatsAppNo string `json:"phoneNo"`
 	Password string `json:"password"`
 };
 
