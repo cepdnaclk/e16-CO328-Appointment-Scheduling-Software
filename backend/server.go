@@ -2,6 +2,7 @@ package main
 
 import (
 	"appoiment-backend/database"
+	"appoiment-backend/middlewares"
 	"appoiment-backend/routes"
 	"log"
 	"os"
@@ -28,6 +29,7 @@ func main() {
 	app := fiber.New()
 	routes.UserSetup(app)
 
+	app.Use(middlewares.AuthMiddleware)
     app.Get("/", func(c *fiber.Ctx) error {
         return c.SendString("Hello, World 👋!")
     })
