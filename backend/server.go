@@ -2,6 +2,7 @@ package main
 
 import (
 	"appoiment-backend/database"
+	"appoiment-backend/routes"
 	"log"
 	"os"
 
@@ -24,7 +25,8 @@ func main() {
 	database.Connect(uri)
 	defer database.Disconnect()
 
-    app := fiber.New()
+	app := fiber.New()
+	routes.UserSetup(app)
 
     app.Get("/", func(c *fiber.Ctx) error {
         return c.SendString("Hello, World 👋!")

@@ -2,8 +2,8 @@
    <div class="rounded overflow-hidden shadow-lg">
       <img class="w-full" src="../assets/back1.jpg" alt="Mountain">
       <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2">{{serviceType}}</div>
-        <h1 class="text-black text-xl font-black">{{serviceName}}</h1>
+        <div class="font-bold text-xl mb-2">{{serviceName}}</div>
+        <h1 class="text-black text-xl font-black">{{}}</h1>
         <p class="text-gray-700 text-base">
           {{serviceDiscription}}
         </p>
