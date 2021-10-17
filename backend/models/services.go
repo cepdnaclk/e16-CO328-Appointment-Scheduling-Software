@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type TimeSlot struct{
 	SlotId int `json:"slotId"`
 	Time string `json:"time"`
@@ -21,7 +23,7 @@ type Service struct{
 	ServiceName string `json:"serviceName"`
 	ServiceDiscription string `json:"serviceDiscription"`
 	ServiceType string `json:"serviceType"`
-	ExpiredDay string `json:"expiryDay"`
+	ExpiredDay time.Time `json:"expiryDay"`
 
 }
 
