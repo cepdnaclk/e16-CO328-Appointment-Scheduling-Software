@@ -30,6 +30,10 @@ func main() {
 	routes.UserSetup(app)
 
 	app.Use(middlewares.AuthMiddleware)
+
+	routes.ClientSetup(app)
+	routes.ServiceSetup(app)
+	
     app.Get("/", func(c *fiber.Ctx) error {
         return c.SendString("Hello, World 👋!")
     })
