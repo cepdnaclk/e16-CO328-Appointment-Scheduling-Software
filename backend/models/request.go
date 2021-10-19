@@ -10,6 +10,7 @@ type Time struct{
 type RequestTimeSlot struct{
 	StartTime Time `json:"startTime"`
 	EndTime Time `json:"endTime"`
+	Id int `json:"id"`
 }
 
 type AddNewServiceRequest struct{
@@ -17,4 +18,14 @@ type AddNewServiceRequest struct{
 	ServiceName string `json:"serviceName"`
 	ServiceDiscription string `json:"serviceDiscription"`
 	ServiceType string `json:"serviceType"`
+}
+
+type ServiceIdRequsest struct{
+	ServiceID string `json:"serviceId"`
+}
+
+type UpdateRequest struct{
+	ServiceID string `json:"serviceId"`
+	SlotId int `json:"slotId"`
+	Date string `json:"date"`
 }

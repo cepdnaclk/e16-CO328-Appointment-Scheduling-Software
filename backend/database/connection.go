@@ -12,6 +12,7 @@ var DB *mongo.Client
 var UserCollection *mongo.Collection
 var ServicesCollection *mongo.Collection
 var ServiceDayDetailsCollection *mongo.Collection
+var ClientRequestedCollection *mongo.Collection
 
 func Connect(uri string)  {
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
@@ -26,6 +27,7 @@ func Connect(uri string)  {
 	UserCollection= client.Database("appoiment-db").Collection("user")
 	ServicesCollection= client.Database("appoiment-db").Collection("services")
 	ServiceDayDetailsCollection= client.Database("appoiment-db").Collection("service_day_details")
+	ClientRequestedCollection=client.Database("appoiment-db").Collection("client_requested_details")
 	DB=client
 }
 
