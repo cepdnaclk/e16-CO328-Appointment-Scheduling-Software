@@ -164,7 +164,7 @@ func SearchByName(serviceName string) ([]*models.ClientServiceResponse,error) {
 	findOptions := options.Find()
 	findOptions.SetLimit(10)
 	var returnVal []*models.ClientServiceResponse
-	cur, err := ServicesCollection.Find(context.TODO(), bson.D{{"text", primitive.Regex{Pattern: serviceName, Options: ""}}}, findOptions)
+	cur, err := ServicesCollection.Find(context.TODO(), bson.D{{"serviceName", primitive.Regex{Pattern: serviceName, Options: ""}}}, findOptions)
 	
 	if err != nil {
     	return nil,err

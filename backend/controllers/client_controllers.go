@@ -1,30 +1,86 @@
 package controllers
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"appoiment-backend/database"
+	"appoiment-backend/models"
+	"fmt"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 func GetClientServicses(c *fiber.Ctx)  error{
-	return nil
+	data,err:=database.GetClientServicses();
+	if err!=nil{
+		fmt.Println(err)
+		c.Status(fiber.StatusInternalServerError)
+		return c.JSON(fiber.Map{"message":"Server Error"})
+	}
+	return c.JSON(data)
 }
 
 func GetAllSlotsOfClientService(c *fiber.Ctx)  error{
-	return nil
+	req:=new(models.ClientServiceSlotRequest)
+	if err := c.BodyParser(req); err != nil{
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{"message":"Required arguments not found"})
+	}
+	data,err:=database.GetAllSlotsOfService(req.OwnerEmail,req.ServiceID)
+	if err!=nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{"message":err.Error()})
+	}
+	return c.JSON(data)
 }
 
 
 func RequestingService(c *fiber.Ctx)  error{
-	return nil
+	req:=new(models.ClientRequestingService)
+	clientEmail:=string(c.Request().Header.Peek("user_email"))
+	if err := c.BodyParser(req); err != nil{
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{"message":"Required arguments not found"})
+	}
+	_,err:=database.ClientRequestingService(req.ServiceOwnerEmail,clientEmail,req.ServiceID,req.SlotId,req.Date)
+	if err != nil {
+		c.Status(409)
+		return c.JSON(fiber.Map{"message":err})
+	}
+	return c.JSON(fiber.Map{"message":"Done"})
 }
 
 func CancelRequestedService(c *fiber.Ctx)  error{
-	return nil
+	req:=new(models.ClientRequestingService)
+	clientEmail:=string(c.Request().Header.Peek("user_email"))
+	if err := c.BodyParser(req); err != nil{
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{"message":"Required arguments not found"})
+	}
+	
+	if err:=database.CancelRequestedService(req.ServiceOwnerEmail,clientEmail,req.ServiceID,req.SlotId,req.Date); err != nil {
+		c.Status(409)
+		return c.JSON(fiber.Map{"message":err})
+	}
+	return c.JSON(fiber.Map{"message":"Done"})
 }
 
 func GetAllRequestedServices(c *fiber.Ctx)  error{
-	return nil
+	clientEmail:=string(c.Request().Header.Peek("user_email"))
+	data,err:=database.GetAllRequestedServices(clientEmail)
+	if err != nil {
+		c.Status(409)
+		return c.JSON(fiber.Map{"message":err})
+	}
+	return c.JSON(data)
 }
 
 func SearchServices(c *fiber.Ctx)  error{
-	return nil
+	req:=new(models.SearchServiceName)
+	data,err:=database.SearchByName(req.ServiceName)
+	if err != nil {
+		c.Status(409)
+		return c.JSON(fiber.Map{"message":err})
+	}
+	return c.JSON(data)
 }
 
 func SericeFindById(c *fiber.Ctx)  error{
