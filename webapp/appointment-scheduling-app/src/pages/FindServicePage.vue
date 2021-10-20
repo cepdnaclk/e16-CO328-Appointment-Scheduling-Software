@@ -13,7 +13,7 @@
     <card />
     <card />
     </div>
-  
+  <AppoimentModal />
 </template>
 
  <script>

@@ -24,8 +24,24 @@ type ServiceIdRequsest struct{
 	ServiceID string `json:"serviceId"`
 }
 
+type ClientServiceSlotRequest struct{
+	ServiceID string `json:"serviceId"`
+	OwnerEmail string  `json:"ownerEmail"`
+}
+
 type UpdateRequest struct{
 	ServiceID string `json:"serviceId"`
 	SlotId int `json:"slotId"`
 	Date string `json:"date"`
+}
+
+type ClientRequestingService struct{
+	ServiceOwnerEmail string `json:"serviceOwnerEmail"`
+	ServiceID string `json:"serviceId"`
+	SlotId int `json:"slotId"`
+	Date string `json:"date"`
+}
+
+type SearchServiceName struct{
+	ServiceName string `json:"serviceName"`
 }

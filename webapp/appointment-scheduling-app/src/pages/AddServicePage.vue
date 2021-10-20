@@ -153,7 +153,7 @@
                         timeSlots:this.list,
                         serviceName:this.serviceName,
                         serviceDiscription:this.serviceDiscription,
-                        erviceType:this.serviceType
+                        serviceType:this.serviceType
 
                     },{
                     headers: {
