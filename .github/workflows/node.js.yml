@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js
-    - run: cd /webapp/appointment-scheduling-app/
+    - run: cd webapp/appointment-scheduling-app/
     - run: npm install
     - run: npm run build --if-present
     - run: npm test
