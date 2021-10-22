@@ -2,6 +2,7 @@ ___
 Appointment Scheduling Application
 ___
 [![Go](https://github.com/cepdnaclk/e16-CO328-Appointment-Scheduling-Software/actions/workflows/go.yml/badge.svg)](https://github.com/cepdnaclk/e16-CO328-Appointment-Scheduling-Software/actions/workflows/go.yml)
+[![Node.js CI](https://github.com/cepdnaclk/e16-CO328-Appointment-Scheduling-Software/actions/workflows/Vue_node.js.yml/badge.svg)](https://github.com/cepdnaclk/e16-CO328-Appointment-Scheduling-Software/actions/workflows/Vue_node.js.yml)
 
 
 appointment scheduling app is an online platform that is easily can be used by anyone who want to make an appointment with any one to get done a particular service. regardless of sending emails and trying so hard to contact the service providers, the users can easuly request an appointment through this application. another advantage of using this is that, the users can get to know about the other service providers which they are looking for. 
