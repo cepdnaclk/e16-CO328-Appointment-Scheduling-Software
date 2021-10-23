@@ -15,7 +15,7 @@ func AddNewService(service *models.Service,serDayDetails *models.ServiceDayDetai
 		return false
 	}
 	_, err = ServiceDayDetailsCollection.InsertOne(context.TODO(), serDayDetails)
-	if err==nil {
+	if err!=nil {
 		return false
 	}
 	return true
@@ -51,9 +51,9 @@ func GetAllServicesCreated(email string) ([]*models.ServiceResponse,error)  {
 }
 
 
-func checkExpired(email string,id string) (bool,error){
+func CheckExpired(email string,id string) (bool,error){
 	var result models.Service
-	filter := bson.M{"email": email,"serviceId":id}
+	filter := bson.M{"email": email,"serviceid":id}
 	if err := ServicesCollection.FindOne(context.TODO(), filter).Decode(&result);err!=nil {
 		return false,err
 	}
@@ -65,7 +65,7 @@ func checkExpired(email string,id string) (bool,error){
 
 func GetAllSlotsOfService(email string,id string)(*[]models.DayDetail,error)  {
 	var result models.ServiceDayDetail
-	filter := bson.M{"email": email,"serviceId":id}
+	filter := bson.M{"email": email,"serviceid":id}
 	if err := ServiceDayDetailsCollection.FindOne(context.TODO(), filter).Decode(&result);err!=nil {
 		return nil,err
 	}
@@ -73,7 +73,7 @@ func GetAllSlotsOfService(email string,id string)(*[]models.DayDetail,error)  {
 }
 
 func DeleteService(email string,id string) bool{
-	filter := bson.M{"email": email,"serviceId":id}
+	filter := bson.M{"email": email,"serviceid":id}
 	
 	if _, err := ServicesCollection.DeleteOne(context.TODO(), filter);err != nil {
 		return false
@@ -82,14 +82,17 @@ func DeleteService(email string,id string) bool{
 	if _, err := ServiceDayDetailsCollection.DeleteOne(context.TODO(), filter);err != nil {
 		return false
 	}
-
+	filter_d := bson.M{"serviceowneremail": email,"serviceid":id}
+	if _, err := ClientRequestedCollection.DeleteMany(context.TODO(), filter_d);err != nil {
+		return false
+	}
 	return true
 
 }
 
 
 func UpdateApproved(email string,serviceId string,slotId int,day string) bool{
-	filter_s := bson.M{"email": email,"serviceId":serviceId}
+	filter_s := bson.M{"email": email,"serviceid":serviceId}
 	var result models.ServiceDayDetail
 	if err := ServiceDayDetailsCollection.FindOne(context.TODO(), filter_s).Decode(&result);err!=nil {
 		return false
@@ -100,7 +103,7 @@ func UpdateApproved(email string,serviceId string,slotId int,day string) bool{
 			for j := 0; j < len(result.DayDetails[i].SlotList); j++ {
 				if result.DayDetails[i].SlotList[j].SlotId==slotId {
 					result.DayDetails[i].SlotList[j].Approved=true
-					filter_c := bson.M{"clientEmail": result.DayDetails[i].SlotList[j].ClientEmail,"serviceId":serviceId,"slotId":result.DayDetails[i].SlotList[j].SlotId,"serviceOwnerEmail":email}
+					filter_c := bson.M{"clientemail": result.DayDetails[i].SlotList[j].ClientEmail,"serviceid":serviceId,"slotid":result.DayDetails[i].SlotList[j].SlotId,"serviceowneremail":email}
 
 					if _, err := ClientRequestedCollection.UpdateOne(
 						context.TODO(),
@@ -117,7 +120,7 @@ func UpdateApproved(email string,serviceId string,slotId int,day string) bool{
 						context.TODO(),
 						filter_s,
 						bson.D{
-							{"$set", bson.D{{"dayDetails", result.DayDetails}}},
+							{"$set", bson.D{{"daydetails", result.DayDetails}}},
 						},
 					)
 					if err != nil {
@@ -133,7 +136,7 @@ func UpdateApproved(email string,serviceId string,slotId int,day string) bool{
 }
 
 func UpdateRemovedClient(email string,serviceId string,slotId int,day string) bool  {
-	filter := bson.M{"email": email,"serviceId":serviceId}
+	filter := bson.M{"email": email,"serviceid":serviceId}
 	var result models.ServiceDayDetail
 	if err := ServiceDayDetailsCollection.FindOne(context.TODO(), filter).Decode(&result);err!=nil {
 		return false
@@ -151,11 +154,15 @@ func UpdateRemovedClient(email string,serviceId string,slotId int,day string) bo
 						context.TODO(),
 						filter,
 						bson.D{
-							{"$set", bson.D{{"dayDetails", result.DayDetails}}},
+							{"$set", bson.D{{"daydetails", result.DayDetails}}},
 						},
 					)
 					if err != nil {
 						fmt.Println(err)
+						return false
+					}
+					filter_d := bson.M{"serviceowneremail": email,"serviceid":serviceId,"slotid":slotId}
+					if _, err := ClientRequestedCollection.DeleteOne(context.TODO(), filter_d);err != nil {
 						return false
 					}
 					return true

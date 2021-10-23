@@ -9,9 +9,8 @@ import (
 )
 
 func Login(user *models.LoginUser) (string,error){
-	var result models.SignupUser
-	filter := bson.D{{"email", user.Email}}
-	if err := UserCollection.FindOne(context.TODO(), filter).Decode(&result);err!=nil {
+	result,err := GetUser(user.Email);
+	if err!=nil {
 		return "",err
 	}
 	return result.Password,nil
@@ -31,4 +30,14 @@ func Signup(user *models.SignupUser) error {
 		return err
 	}
 	return nil
+}
+
+func GetUser(email string)(*models.SignupUser,error){
+	var result models.SignupUser
+	filter := bson.D{{"email", email}}
+	if err := UserCollection.FindOne(context.TODO(), filter).Decode(&result);err!=nil {
+		return nil,err
+	}else {
+		return &result,nil
+	}
 }

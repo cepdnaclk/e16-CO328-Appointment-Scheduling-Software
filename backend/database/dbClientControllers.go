@@ -52,7 +52,7 @@ func GetClientServicses()  ([]*models.ClientServiceResponse,error){
 
 
 func ClientRequestingService(ownerEmail string,clientEmail string,serviceId string,slotId int,day string)(bool,error )  {
-	filter := bson.M{"email": ownerEmail,"serviceId":serviceId}
+	filter := bson.M{"email": ownerEmail,"serviceid":serviceId}
 	var result models.ServiceDayDetail
 	if err := ServiceDayDetailsCollection.FindOne(context.TODO(), filter).Decode(&result);err!=nil {
 		return false,err
@@ -63,18 +63,21 @@ func ClientRequestingService(ownerEmail string,clientEmail string,serviceId stri
 			for j := 0; j < len(result.DayDetails[i].SlotList); j++ {
 				if result.DayDetails[i].SlotList[j].SlotId==slotId {
 					if result.DayDetails[i].SlotList[j].ClientRequested==true {
-						return false,errors.New("Already client Requested")
+						return false,nil
 					}
+					user,_:=GetUser(clientEmail)
 					result.DayDetails[i].SlotList[j].ClientRequested=true
 					result.DayDetails[i].SlotList[j].ClientEmail=clientEmail
+					result.DayDetails[i].SlotList[j].ClintName=user.FristName+" "+user.LastName
 
 					clientRequest:=models.ClientRequestedService{
+						Date: day,
 						ServiceOwnerEmail: ownerEmail,
 						ClientEmail: clientEmail,
 						ServiceID: serviceId,
 						SlotId: slotId,
 						Approved: false,
-
+						Time: result.DayDetails[i].SlotList[j].Time,
 					}
 
 					if _, err := ClientRequestedCollection.InsertOne(context.TODO(), clientRequest);err!=nil{
@@ -85,7 +88,7 @@ func ClientRequestingService(ownerEmail string,clientEmail string,serviceId stri
 						context.TODO(),
 						filter,
 						bson.D{
-							{"$set", bson.D{{"dayDetails", result.DayDetails}}},
+							{"$set", bson.D{{"daydetails", result.DayDetails}}},
 						},
 					)
 					if err != nil {
@@ -101,7 +104,7 @@ func ClientRequestingService(ownerEmail string,clientEmail string,serviceId stri
 }
 
 func CancelRequestedService(ownerEmail string,clientEmail string,serviceId string,slotId int,day string) error  {
-	filter := bson.M{"email": ownerEmail,"serviceId":serviceId}
+	filter := bson.M{"email": ownerEmail,"serviceid":serviceId}
 	var result models.ServiceDayDetail
 	if err := ServiceDayDetailsCollection.FindOne(context.TODO(), filter).Decode(&result);err!=nil {
 		return err
@@ -113,8 +116,8 @@ func CancelRequestedService(ownerEmail string,clientEmail string,serviceId strin
 				if result.DayDetails[i].SlotList[j].SlotId==slotId {
 					result.DayDetails[i].SlotList[j].ClientRequested=false
 					result.DayDetails[i].SlotList[j].ClientEmail=""
-
-					filter_D := bson.M{"serviceOwnerEmail": ownerEmail,"serviceId":serviceId,"clientEmail":clientEmail,"slotId":slotId}
+					result.DayDetails[i].SlotList[j].ClintName=""
+					filter_D := bson.M{"serviceowneremail": ownerEmail,"serviceid":serviceId,"clientemail":clientEmail,"slotid":slotId}
 
 					if _, err := ClientRequestedCollection.DeleteOne(context.TODO(),filter_D);err!=nil{
 						return err
@@ -123,7 +126,7 @@ func CancelRequestedService(ownerEmail string,clientEmail string,serviceId strin
 						context.TODO(),
 						filter,
 						bson.D{
-							{"$set", bson.D{{"dayDetails", result.DayDetails}}},
+							{"$set", bson.D{{"daydetails", result.DayDetails}}},
 						},
 					)
 					if err != nil {
@@ -137,9 +140,9 @@ func CancelRequestedService(ownerEmail string,clientEmail string,serviceId strin
 	return errors.New("Not found requested slot")
 }
 
-func GetAllRequestedServices(email string) ([]*models.ClientRequestedService,error)  {
-	var returnVal []*models.ClientRequestedService
-	filter := bson.D{{"email", email}}
+func GetAllRequestedServices(email string) ([]*models.ClientRequestedServicesResponse,error)  {
+	var returnVal []*models.ClientRequestedServicesResponse
+	filter := bson.D{{"clientemail", email}}
 
 	cur, err := ClientRequestedCollection.Find(context.TODO(), filter, nil)
 	if err != nil {
@@ -147,14 +150,27 @@ func GetAllRequestedServices(email string) ([]*models.ClientRequestedService,err
 	}
 
 	for cur.Next(context.TODO()) {
-    
 		var result models.ClientRequestedService
 		err := cur.Decode(&result)
 		if err != nil {
 			return nil,err
 		}
-
-		returnVal = append(returnVal, &result)
+		filter := bson.M{"email": result.ServiceOwnerEmail,"serviceid":result.ServiceID}
+		var service models.Service
+		if err := ServicesCollection.FindOne(context.TODO(), filter).Decode(&service);err!=nil {
+			return nil,err
+		}
+		
+		returnVal = append(returnVal, &models.ClientRequestedServicesResponse{
+			ServiceOwnerEmail: result.ServiceOwnerEmail,
+			ServiceID: result.ServiceID,
+			SlotId: result.SlotId,
+			Approved: result.Approved,
+			Time: result.Time,
+			ServiceName: service.ServiceName,
+			ServiceDiscription: service.ServiceDiscription,
+			Date: result.Date,
+		})
 	}
 
 	return returnVal,nil
@@ -164,7 +180,7 @@ func SearchByName(serviceName string) ([]*models.ClientServiceResponse,error) {
 	findOptions := options.Find()
 	findOptions.SetLimit(10)
 	var returnVal []*models.ClientServiceResponse
-	cur, err := ServicesCollection.Find(context.TODO(), bson.D{{"serviceName", primitive.Regex{Pattern: serviceName, Options: ""}}}, findOptions)
+	cur, err := ServicesCollection.Find(context.TODO(), bson.D{{"servicename", primitive.Regex{Pattern: serviceName}}}, findOptions)
 	
 	if err != nil {
     	return nil,err

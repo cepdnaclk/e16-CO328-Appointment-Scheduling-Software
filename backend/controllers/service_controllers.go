@@ -50,10 +50,11 @@ func AddNewService(c *fiber.Ctx)  error{
 
 	for i := 0; i < noOfDays; i++ {
 		dayDetail=append(dayDetail, models.DayDetail{
-			Date: today.Add(24 * time.Hour *time.Duration(i+1)).String(),
+			Date: today.Add(24 * time.Hour *time.Duration(i+1)).Format("2006-January-02"),
 			SlotList: timeSlotList,
 		})
 	}
+	serviceDayDatails.DayDetails=dayDetail
 	if database.AddNewService(service,serviceDayDatails) {
 		c.Status(200)
 		return c.JSON(fiber.Map{"message":"Done"})
@@ -84,6 +85,15 @@ func GetAllSlotsOfService(c *fiber.Ctx)  error{
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{"message":"Required arguments not found"})
 	}
+	
+	if status,err:=database.CheckExpired(email,data.ServiceID);status {
+		if err != nil {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(fiber.Map{"message":err.Error()})
+		}
+		return c.JSON([]models.DayDetail{})
+	}
+	
 	slots,err:=database.GetAllSlotsOfService(email,data.ServiceID)
 	if err != nil {
 		c.Status(fiber.StatusBadRequest)
@@ -117,9 +127,9 @@ func ApproveClientRequest(c *fiber.Ctx)  error{
 		return c.JSON(fiber.Map{"message":"Required arguments not found"})
 	}
 	if database.UpdateApproved(email,data.ServiceID,data.SlotId,data.Date) {
-		return c.JSON(fiber.Map{"message":"Done"})
+		return c.JSON(fiber.Map{"message":true})
 	}else{
-		return c.JSON(fiber.Map{"message":"Delete failed"})
+		return c.JSON(fiber.Map{"message":false})
 	}
 }
 
@@ -131,8 +141,8 @@ func RemoveClientRequest(c *fiber.Ctx)  error{
 		return c.JSON(fiber.Map{"message":"Required arguments not found"})
 	}
 	if database.UpdateRemovedClient(email,data.ServiceID,data.SlotId,data.Date) {
-		return c.JSON(fiber.Map{"message":"Done"})
+		return c.JSON(fiber.Map{"message":true})
 	}else{
-		return c.JSON(fiber.Map{"message":"Delete failed"})
+		return c.JSON(fiber.Map{"message":false})
 	}
 }

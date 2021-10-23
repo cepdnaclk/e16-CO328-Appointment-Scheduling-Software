@@ -9,6 +9,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
@@ -27,6 +28,13 @@ func main() {
 	defer database.Disconnect()
 
 	app := fiber.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowHeaders:  "Origin, Content-Type,Accept,Authorization",
+		ExposeHeaders:"Origin, Content-Type,Accept,Authorization",
+	}))
+
+
 	routes.UserSetup(app)
 
 	app.Use(middlewares.AuthMiddleware)

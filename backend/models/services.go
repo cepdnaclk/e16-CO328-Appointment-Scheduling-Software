@@ -35,9 +35,11 @@ type ServiceDayDetail struct{
 
 
 type ClientRequestedService struct{
+	Date string `json:"date"`
 	ServiceOwnerEmail string `json:"serviceOwnerEmail"`
 	ClientEmail string `json:"clientEmail"`
 	ServiceID string `json:"serviceId"`
 	SlotId int `json:"slotId"`
 	Approved bool `json:"approved"`
+	Time string `json:"time"`
 }

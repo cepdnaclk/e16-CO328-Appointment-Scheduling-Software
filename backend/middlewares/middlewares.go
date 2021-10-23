@@ -57,7 +57,7 @@ func AuthMiddleware(c *fiber.Ctx) error {
 		fmt.Println(err)
 		return err
     }
-	  
-	c.Set("Auth-Email",email)
+	c.Request().Header.Add("user_email",email)  
+	// c.Set("user_email",email)
 	return c.Next()
 }

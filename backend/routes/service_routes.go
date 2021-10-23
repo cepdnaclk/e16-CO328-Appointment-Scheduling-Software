@@ -11,6 +11,6 @@ func ServiceSetup(app *fiber.App)  {
 	app.Get("get-all-created-services",controllers.GetAllServices)
 	app.Post("get-slots-created-service",controllers.GetAllSlotsOfService)
 	app.Post("delete-service",controllers.DeleteService)
-	app.Post("approve-client-request",controllers.ApproveClientRequest)
-	app.Post("remove-client-request",controllers.RemoveClientRequest)
+	app.Post("approve-client",controllers.ApproveClientRequest)
+	app.Post("remove-client",controllers.RemoveClientRequest)
 }

@@ -11,7 +11,7 @@ func ClientSetup(app *fiber.App)  {
 	app.Post("get-slots-client-service",controllers.GetAllSlotsOfClientService)
 	app.Post("request-service",controllers.RequestingService)
 	app.Post("cancel-requested-service",controllers.CancelRequestedService)
-	app.Post("getall-requested-services",controllers.GetAllRequestedServices)
+	app.Get("getall-requested-services",controllers.GetAllRequestedServices)
 	app.Post("search-services",controllers.SearchServices)
 	app.Post("service-find-by-Id",controllers.SericeFindById)
 }
