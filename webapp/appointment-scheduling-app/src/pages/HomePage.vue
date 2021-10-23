@@ -10,7 +10,7 @@
       <p className="main-subheading">Appoiment sheduling journey ...</p>
       <div className="btn-container">
         <router-link to="/find-service">
-        <button className="btn btn-outline">FIND SERVICE</button>
+        <button @click="changeToClient" className="btn btn-outline">FIND SERVICE</button>
          </router-link>
         <router-link to="/about">
         <button className="btn btn-solid">ABOUT US</button>
@@ -21,6 +21,13 @@
 
 <script>
 export default {
+
+  methods:{
+    changeToClient(){
+      this.$store.commit('setClient')
+      this.$cookies.set("user_type","Clint")
+    }
+  }
 
 }
 </script>

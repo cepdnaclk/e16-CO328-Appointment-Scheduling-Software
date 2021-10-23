@@ -1,180 +1,108 @@
 <template>
    <div class="container-bar">
         <div class="relative">
-            <div class="input-tab"> <i class="fa fa-search text-gray-400 z-20 hover:text-gray-500"></i> </div> <input type="text" class="h-14 w-96 pl-10 pr-20 rounded-lg z-0 focus:shadow focus:outline-none" placeholder="Search anything...">
-            <div class="searchbutton"> <button class="button-s" type='submit'>Search</button> </div>
+            <div class="input-tab"> <i class="fa fa-search text-gray-400 z-20 hover:text-gray-500"></i> </div> <input type="text" class="h-14 w-96 pl-10 pr-20 rounded-lg z-0 focus:shadow focus:outline-none" placeholder="Search anything..." v-bind="searchKey">
+            <div class="searchbutton"> <button class="button-s" @click="search" >Search</button> </div>
         </div>
     </div>
     <div class="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-    <card serviceDiscription="bbbbbbbb" serviceId="000" serviceName="aseddddmm" serviceType="Monthly"/>
-    <card />
-    <card />
-    <card />
-    <card />
-    <card />
+    <card v-for="ele,index in services" :key="index" :serviceDiscription="ele.serviceDiscription" :serviceName="ele.serviceName" :serviceId="ele.serviceId" :serviceType="ele.serviceType"
+    :fname="ele.ownerFristName" :lname="ele.ownerLastName" :ownerEmail="ele.serviceOwnerEmail"
+    :checkNow="()=>checkNow(ele.serviceOwnerEmail,ele.serviceId)"
+    />
     </div>
-  <AppoimentModal />
+  <Alert v-if="isFailedRequestAlert" message="Someone has requested slot earlier" heading="Already Requested" redButtonLabel="Refresh" whiteButtonLabel="Cancel" :redButtonFunc="()=>refresh()" :whiteButtonFunc="()=>cancelAlert()"/>
+  <SearchAppoimentModal v-if="isOpenedSearchAppoimentModal"
+   @done="requestDone"
+   @request-failed-alert="alertOpen"
+   @close-search-appoimentmodel="closeSearchAppoimentModal" 
+  :dayDataList="getDayDataList" 
+  :selecteServiceID="selecteServiceID"
+  :ownerEmail="ownerEmail"
+  />
 </template>
 
  <script>
    import card from '../components/CardClient.vue'
-   import {getDataFromApiPOST} from '../Functions/dataApi'
-   import AppoimentModal from './ClientAppointmentModal.vue'
-
-   export default {
-  computed:{
-    isDeleteAlertShowing(){
-      return this.$store.state.dashboardAlert
+   import Alert from '../components/Alert.vue'
+   import {getDataFromApiPOST,getDataFromApiGET} from '../Functions/dataApi'
+   import SearchAppoimentModal from './SearchAppoimentModal.vue'
+   import {SEARCH_URL,GET_NEWEST_SERVICES,GET_CLIENT_SLOTS_OF_A_SERVICE} from '../constatns'
+  export default {
+    components:{
+      card,
+      SearchAppoimentModal,
+      Alert
     },
-    isExpiredAlertShowing(){
-      return this.$store.state.dashboardAlertExpired
-    },
-    appoimentModelOpen(){
-      return this.$store.state.appoimentModal
-    }
-  },
-  components:{
-    card,
-    AppoimentModal
-  },
-  data(){
-    return{
-      services:[
-        {
-         "serviceName":"Topic Of service provider",
-         "serviceDiscription":"asdddddddddddddddddddddddddddddddddd",
-         "serviceType":"service category",
-         "serviceId":'0000000',
-        },
-        {
-         "serviceName":"Topic Of Name",
-         "serviceDiscription":"asdddddddddddddddddddddddddddddddddd",
-         "serviceType":"Monthly",
-         "serviceId":'0000000',
-        },
-        {
-         "serviceName":"Topic Of Name",
-         "serviceDiscription":"asdddddddddddddddddddddddddddddddddd",
-         "serviceType":"Monthly",
-         "serviceId":'0000000',
-        }
-      ],
-      deletingID:"",
-      selecteServiceID:"",
-      dayDataList:[
-        {
-          date:"2021-11-11",
-          slotList:[
-            {
-              slotId:1,
-              time:"11:00:00-12:00:00 am",
-              clientName:"Supun",
-              clientEmail:"Supun@email",
-              clientRequested:false,
-              approved:false,
-            },
-            {
-              slotId:2,
-              time:"11:00:00-12:00:00 am",
-              clientName:"Supun",
-              clientEmail:"Supun@email",
-              clientRequested:true,
-              approved:false,
-            },
-            {
-              slotId:3,
-              time:"11:00:00-12:00:00 am",
-              clientName:"Supun",
-              clientEmail:"Supun@email",
-              clientRequested:true,
-              approved:true,
-            }
-          ]
-        },
-        {
-          date:"2021-11-11",
-          slotList:[
-            {
-              slotId:1,
-              time:"11:00:00-12:00:00 am",
-              clientName:"Supun",
-              clientEmail:"Supun@email",
-              clientRequested:false,
-              approved:false,
-            },
-            {
-              slotId:2,
-              time:"11:00:00-12:00:00 am",
-              clientName:"Supun",
-              clientEmail:"Supun@email",
-              clientRequested:true,
-              approved:false,
-            },
-            {
-              slotId:3,
-              time:"11:00:00-12:00:00 am",
-              clientName:"Supun",
-              clientEmail:"Supun@email",
-              clientRequested:true,
-              approved:true,
-            }
-          ]
-        }
-      ]
-    }
-  },
-  methods:{
-    deleteService(id){
-      this.deletingID=id
-      this.$store.commit('setDashBoardAlert')
-    },
-    confirmDelete(){
-      this.$store.commit('removeDashBoardAlert')
-      getDataFromApiPOST(this,'deleteService',{deleteID:this.deletingID},"Done ","Service Deleted!"
-      ,'/dash-board',true,true)      
-    },
-
-    cancelDelete(){
-      this.$store.commit('removeDashBoardAlert')
-    },
-
-
-    getDetail(id){
-      console.log(id)
-      this.$store.commit('setAppoimentModal')
-      this.selecteServiceID=id
-      /*
-      let data = getDataFromApiPOST(this,'getDetailService',{serviceID:id},"","",'',false,false)
-      if(data.length==0){
-        this.deletingID=id
-        this.$store.commit('setDashBoardExpiredAlert')
-        return
-      }else{
-        this.dayDataList=data
-        this.$store.commit('setAppoimentModal')
+    computed:{
+      isOpenedSearchAppoimentModal(){
+        return this.openappoimentmodal
+      },
+      isFailedRequestAlert(){
+        return this.isRequestfailed
+      },
+      getDayDataList(){
+        return this.dayDataList
       }
-      */
-      
     },
-
-
-    cancelExpiedDelete(){
-      this.$store.commit('removeDashBoardExpiredAlert')
+    data(){
+      return{
+        services:[],
+        searchKey:"",
+        selecteServiceID:"",
+        ownerEmail:"",
+        dayDataList:[],
+        openappoimentmodal:false,
+        isRequestfailed:false
+      }
     },
-
-
-    confirmExpiredDelete(){
-      this.$store.commit('removeDashBoardExpiredAlert')
-      getDataFromApiPOST(this,'deleteService',{deleteID:this.deletingID},"Done ","Service Removed!"
-      ,'/dash-board',true,true)      
+    beforeMount(){
+      getDataFromApiGET(this,GET_NEWEST_SERVICES,"","","",false,false).then(data=>{
+      this.services=data
+      }).catch(_err=>{
+        this.services=[] 
+      })
     },
+    methods:{
 
-    closeAppoimentModel(){
-      this.$store.commit('removeAppoimentModal')
+      checkNow(ownerEmail,serviceId){
+        this.ownerEmail=ownerEmail
+        this.selecteServiceID=serviceId
+        this.openappoimentmodal=true
+        getDataFromApiPOST(this,GET_CLIENT_SLOTS_OF_A_SERVICE,{serviceId,ownerEmail},"","",'',false,false).then(data=>{
+          this.dayDataList=data
+        }).catch(err=>{
+          console.log(err)
+          this.dayDataList=[]
+        })
+        
+      },
+
+      search(){
+        getDataFromApiPOST(this,SEARCH_URL,{serviceName:this.searchKey},"","",'',false,false).then(data=>{
+          this.services=data
+        }).catch(_err=>{
+          this.services=[]
+        })
+      },
+      closeSearchAppoimentModal(){
+        this.openappoimentmodal=false
+      },
+      cancelAlert(){
+        this.isRequestfailed=false
+      },alertOpen(){
+        this.openappoimentmodal=false
+        this.isRequestfailed=true
+      },
+      refresh(){
+        this.isRequestfailed=false
+        this.checkNow(this.ownerEmail,this.selecteServiceID)
+      },
+      requestDone(){
+        this.checkNow(this.ownerEmail,this.selecteServiceID)
+      }
     }
-
   }
- }
  </script>
 
 <style>

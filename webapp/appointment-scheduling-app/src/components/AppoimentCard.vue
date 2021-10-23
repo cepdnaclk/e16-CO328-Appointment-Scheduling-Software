@@ -71,11 +71,12 @@
         </table>
     </div>
 </div>
- </template>
+</template>
  
- <script>
+<script>
  import AppoimentSlot from '../components/AppoimentSlot.vue'
  import {getDataFromApiPOST} from '../Functions/dataApi'
+ import {APPROVE_CLIENT_REQUEST,REMOVE_CLIENT_REQUEST} from '../constatns'
  export default {
     components:{
         AppoimentSlot
@@ -91,22 +92,25 @@
         }
     },
     methods:{
-        removeSlot(id){
-            let result=getDataFromApiPOST(this,'removeclientslot',
-            {slotID:id,selecteServiceID:this.selecteServiceID},"Done ","Client removed!" ,'',false,true)
-            if(result.status){
-                this.slotListOfService.filter((ele)=>{
-                    return ele.slotID===id
-                })
-            }
+        removeSlot(id){ 
+            getDataFromApiPOST(this,REMOVE_CLIENT_REQUEST,
+            {slotId:id,serviceId:this.selecteServiceID,date:this.date},"Done ","Client removed!" ,'',false,true).then(data=>{
+                if(data.message){
+                 this.$emit("refresh-appoiment-model")
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
+            
         },
         approveSlot(id){
-            let result=getDataFromApiPOST(this,'approveclientslot',
-            {slotID:id,selecteServiceID:this.selecteServiceID},"Done ","Client Approved!" ,'',false,true)
-            if(result.status){
-                let index=this.slotListOfService.findIndex((obj => obj.id == id));
-                this.slotListOfService[index].approved=true
-            }
+            getDataFromApiPOST(this,APPROVE_CLIENT_REQUEST,{slotId:id,serviceId:this.selecteServiceID,date:this.date},"Done ","Client Approved!" ,'',false,true).then(data=>{
+                if(data.message){
+                this.$emit("refresh-appoiment-model")
+               }
+            }).catch(err=>{
+                console.log(err)
+            })
         }
     }
  }

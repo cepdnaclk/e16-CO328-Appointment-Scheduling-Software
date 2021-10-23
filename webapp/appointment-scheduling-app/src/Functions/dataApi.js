@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 export  function getDataFromApiPOST(obj,url,data,doneTitle,doneText,pushLink,redirect,doneNotification) {
-    let loader = obj.$loading.show();
+    return new Promise((resolve,reject)=>{
+      let loader = obj.$loading.show();
       axios.post(url, data,{
           
           headers: {
@@ -19,10 +20,10 @@ export  function getDataFromApiPOST(obj,url,data,doneTitle,doneText,pushLink,red
           if (redirect) {
             obj.$router.push(pushLink)
           }else{
-            return response.data
+            return resolve(response.data)
           }
          
-      }).catch(function (error) {
+      }).catch(error=> {
          loader.hide()
           if (error.response && error.response.status==403) {
               obj.$cookies.remove("user_token")
@@ -41,14 +42,16 @@ export  function getDataFromApiPOST(obj,url,data,doneTitle,doneText,pushLink,red
                   text: "Something happened in setting up the request that triggered a Error!",
                 }, 4000)
             }
+            reject(error) 
                
     });
+    })
 }
 
 export  function getDataFromApiGET(obj,url,doneTitle,doneText,pushLink,redirect,doneNotification) {
-  let loader = obj.$loading.show();
+  return new Promise((resolve,reject)=>{
+    let loader = obj.$loading.show();
     axios.get(url,{
-        
         headers: {
           'Authorization': obj.$cookies.get("user_token")
         }
@@ -65,11 +68,10 @@ export  function getDataFromApiGET(obj,url,doneTitle,doneText,pushLink,redirect,
         if (redirect) {
           obj.$router.push(pushLink)
         }else{
-          return response.data
+          return resolve(response.data)
         }
-    }).catch(function (error) {
+    }).catch(error=> {
        loader.hide()
-        
         if (error.response && error.response.status==403) {
             obj.$cookies.remove("user_token")
             obj.$cookies.remove("user_type")
@@ -87,6 +89,7 @@ export  function getDataFromApiGET(obj,url,doneTitle,doneText,pushLink,redirect,
                 text: "Something happened in setting up the request that triggered a Error!",
               }, 4000)
           }
-             
+          reject(error)       
   });
+ }) 
 }

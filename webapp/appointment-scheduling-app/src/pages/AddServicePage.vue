@@ -85,6 +85,7 @@
   import VueTimepicker from 'vue3-timepicker/src/VueTimepicker.vue'
   import { defineComponent } from 'vue'
   import { VueDraggableNext } from 'vue-draggable-next'
+  import {ADD_NEW_SERVICE_URL} from '../constatns'
   export default defineComponent({
     components: {
       draggable: VueDraggableNext,
@@ -149,7 +150,7 @@
                     
                 }else{
                     let loader = this.$loading.show();
-                    axios.post('addNewService', {
+                    axios.post(ADD_NEW_SERVICE_URL, {
                         timeSlots:this.list,
                         serviceName:this.serviceName,
                         serviceDiscription:this.serviceDiscription,
@@ -168,7 +169,7 @@
                         }, 4000);
                         this.$router.push('/dash-board')
                         console.log(response);
-                    }).catch(function (error) {
+                    }).catch(error=>{
                         loader.hide()
                         
                         if (error.response && error.response.status==403) {

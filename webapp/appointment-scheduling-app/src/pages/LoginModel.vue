@@ -24,7 +24,7 @@
 <script>
     import BlueModal from '../components/BlueModal.vue'
     import axios from 'axios'
-
+    import {LOGIN_URL} from '../constatns'
     export default {
         components:{
             BlueModal,
@@ -37,9 +37,6 @@
         },
         methods:{
             login(){ 
-                this.$cookies.set("user_token","25j_7Sl6xDq2Kc3ym0fmrSSk2xV2XkUkX")
-                this.$store.commit('setLogedIn')
-                this.$emit('close-login')
                 if(this.email==="" || this.password===""){
                     this.$notify({
                     group: "generic",
@@ -49,25 +46,22 @@
                     
                 }else{
                     let loader = this.$loading.show();
-                    axios.post('login', {
+                    axios.post(LOGIN_URL, {
                         email: this.email,
                         password:this.password
                     })
                     .then( (response) =>{
-                        
                         this.$store.commit('setLogedIn')
-                        this.$cookies.set("user_token",response.headers['Authorization'])
+                        this.$cookies.set("user_token",response.headers['authorization'])
                         this.$emit('close-login')
                         loader.hide()
-                        console.log(response);
-                    })
-                    .catch(function (error) {
+                    }).catch(error => {
                         loader.hide()
-                        if (error.response && error.response.status==401) {
+                        if (error.response && error.response.status===409) {
                             this.$notify({
                             group: "error",
                             title: "Login Failed",
-                            text: "Your email or password is incorrect"
+                            text: "Your email or password is incorrect",
                             }, 4000)
                         } else {
                             this.$notify({

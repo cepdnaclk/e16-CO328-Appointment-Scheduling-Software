@@ -20,8 +20,8 @@
         <router-link to="/find-service">
         <button  class=" px-3 hover:text-gray-500 focus:outline-none " >SEARCH</button>
         </router-link>
-        <router-link to="/open-link">
-        <button  class=" px-3 hover:text-gray-500 focus:outline-none" >OPEN LINK</button>
+        <router-link to="/requested-service">
+        <button  class=" px-3 hover:text-gray-500 focus:outline-none" >REQUESTED</button>
         </router-link>
         <button  class=" px-3 hover:text-gray-500 focus:outline-none" @click="logout">LOGOUT</button>
       </div>

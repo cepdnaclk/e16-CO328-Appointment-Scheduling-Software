@@ -6,16 +6,26 @@
   </div>
   <Alert v-if="isDeleteAlertShowing" message="Do you want to delete this service ?" heading="Delete" redButtonLabel="Delete" whiteButtonLabel="Cancel" :redButtonFunc="()=>confirmDelete()" :whiteButtonFunc="()=>cancelDelete()"/>
   <Alert v-if="isExpiredAlertShowing" message="Your service expired,Do you want to Remove this service ?" heading="Remove" redButtonLabel="Remove" whiteButtonLabel="Cancel" :redButtonFunc="()=>confirmExpiredDelete()" :whiteButtonFunc="()=>cancelExpiedDelete()"/>
-  <AppoimentModal v-if="appoimentModelOpen" :dayDataList="dayDataList" @close-appoimentmodel="closeAppoimentModel" :selecteServiceID="selecteServiceID"/>
- </template>
+  <AppoimentModal v-if="appoimentModelOpen" :dayDataList="dayDataList" @close-appoimentmodel="closeAppoimentModel" :selecteServiceID="selecteServiceID"
+  @refresh-appoiment-model="refreshModal"
+  />
+</template>
  
  <script>
-   import {getDataFromApiPOST} from '../Functions/dataApi'
+   import {getDataFromApiPOST,getDataFromApiGET} from '../Functions/dataApi'
    import Card from '../components/Card.vue'
    import Alert from '../components/Alert.vue'
    import AppoimentModal from './AppoimentModal.vue'
+   import {GET_ALL_CREATED_SERVICES_URL,GET_DETAILS_OF_SERVICE,DELETE_SERVICE} from '../constatns'
 
    export default {
+  beforeMount(){
+    getDataFromApiGET(this,GET_ALL_CREATED_SERVICES_URL,"","","",false,false).then(data=>{
+      this.services=data
+    }).catch(_err=>{
+      this.services=[]
+    })
+  },
   computed:{
     isDeleteAlertShowing(){
       return this.$store.state.dashboardAlert
@@ -25,7 +35,8 @@
     },
     appoimentModelOpen(){
       return this.$store.state.appoimentModal
-    }
+    },
+  
   },
   components:{
     Card,
@@ -34,88 +45,10 @@
   },
   data(){
     return{
-      services:[
-        {
-         "serviceName":"Topic Of Name",
-         "serviceDiscription":"asdddddddddddddddddddddddddddddddddd",
-         "serviceType":"Monthly",
-         "serviceId":'0000000',
-        },
-        {
-         "serviceName":"Topic Of Name",
-         "serviceDiscription":"asdddddddddddddddddddddddddddddddddd",
-         "serviceType":"Monthly",
-         "serviceId":'0000000',
-        },
-        {
-         "serviceName":"Topic Of Name",
-         "serviceDiscription":"asdddddddddddddddddddddddddddddddddd",
-         "serviceType":"Monthly",
-         "serviceId":'0000000',
-        }
-      ],
+      services:[],
       deletingID:"",
       selecteServiceID:"",
-      dayDataList:[
-        {
-          date:"2021-11-11",
-          slotList:[
-            {
-              slotId:1,
-              time:"11:00:00-12:00:00 am",
-              clientName:"Supun",
-              clientEmail:"Supun@email",
-              clientRequested:false,
-              approved:false,
-            },
-            {
-              slotId:2,
-              time:"11:00:00-12:00:00 am",
-              clientName:"Supun",
-              clientEmail:"Supun@email",
-              clientRequested:true,
-              approved:false,
-            },
-            {
-              slotId:3,
-              time:"11:00:00-12:00:00 am",
-              clientName:"Supun",
-              clientEmail:"Supun@email",
-              clientRequested:true,
-              approved:true,
-            }
-          ]
-        },
-        {
-          date:"2021-11-11",
-          slotList:[
-            {
-              slotId:1,
-              time:"11:00:00-12:00:00 am",
-              clientName:"Supun",
-              clientEmail:"Supun@email",
-              clientRequested:false,
-              approved:false,
-            },
-            {
-              slotId:2,
-              time:"11:00:00-12:00:00 am",
-              clientName:"Supun",
-              clientEmail:"Supun@email",
-              clientRequested:true,
-              approved:false,
-            },
-            {
-              slotId:3,
-              time:"11:00:00-12:00:00 am",
-              clientName:"Supun",
-              clientEmail:"Supun@email",
-              clientRequested:true,
-              approved:true,
-            }
-          ]
-        }
-      ]
+      dayDataList:[]
     }
   },
   methods:{
@@ -125,8 +58,10 @@
     },
     confirmDelete(){
       this.$store.commit('removeDashBoardAlert')
-      getDataFromApiPOST(this,'deleteService',{deleteID:this.deletingID},"Done ","Service Deleted!"
-      ,'/dash-board',true,true)      
+      getDataFromApiPOST(this,DELETE_SERVICE,{serviceId:this.deletingID},"Done ","Service Deleted!"
+      ,'/dash-board',true,true).then(data=>{
+        this.$route.go()
+      })      
     },
 
     cancelDelete(){
@@ -135,21 +70,19 @@
 
 
     getDetail(id){
-      console.log(id)
-      this.$store.commit('setAppoimentModal')
-      this.selecteServiceID=id
-      /*
-      let data = getDataFromApiPOST(this,'getDetailService',{serviceID:id},"","",'',false,false)
-      if(data.length==0){
-        this.deletingID=id
-        this.$store.commit('setDashBoardExpiredAlert')
-        return
-      }else{
-        this.dayDataList=data
-        this.$store.commit('setAppoimentModal')
-      }
-      */
-      
+     console.log(id)
+     this.selecteServiceID=id
+     getDataFromApiPOST(this,GET_DETAILS_OF_SERVICE,{serviceID:id},"","",'',false,false).then(data=>{
+          if(data.length==0){
+            this.deletingID=id
+            this.$store.commit('setDashBoardExpiredAlert')
+          }else{
+            this.dayDataList=data
+            this.$store.commit('setAppoimentModal')
+          }
+      }).catch(error=>{
+        console.log(error)
+      })
     },
 
 
@@ -160,12 +93,16 @@
 
     confirmExpiredDelete(){
       this.$store.commit('removeDashBoardExpiredAlert')
-      getDataFromApiPOST(this,'deleteService',{deleteID:this.deletingID},"Done ","Service Removed!"
+      getDataFromApiPOST(this,DELETE_SERVICE,{serviceId:this.deletingID},"Done ","Service Removed!"
       ,'/dash-board',true,true)      
     },
 
     closeAppoimentModel(){
       this.$store.commit('removeAppoimentModal')
+    },
+    refreshModal(){
+      this.$store.commit('removeAppoimentModal')
+      this.getDetail(this.selecteServiceID)
     }
 
   }

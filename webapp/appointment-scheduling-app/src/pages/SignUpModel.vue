@@ -44,6 +44,7 @@
  <script>
     import BlueModal from '../components/BlueModal.vue'
     import axios from 'axios'
+    import {SIGNUP_URL} from '../constatns'
     export default {
         components:{
             BlueModal,
@@ -79,7 +80,7 @@
                     
             }else{
               let loader = this.$loading.show();
-              axios.post('signup', {
+              axios.post(SIGNUP_URL, {
                   email: this.email,
                   password:this.password,
                   fristName:this.fristName,
@@ -97,7 +98,7 @@
                   text: "Signup completed!"
                   }, 4000);
               })
-              .catch(function (error) {
+              .catch(error=> {
                   loader.hide()
                   if (error.response && error.response.status==409) {
                       this.$notify({
