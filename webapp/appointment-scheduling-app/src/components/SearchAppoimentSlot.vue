@@ -1,9 +1,9 @@
  <template>
    <tr class="bg-gray-100 text-center border-b text-sm text-gray-600">
                     <td class="p-2 border-r">{{time}}</td>
-                    <td class="p-2 border-r">{{status}}</td>
+                    <td class="p-2 border-r" data-test="status">{{status}}</td>
                     <td>
-                        <button  class="p-2 hover:shadow-lg text-xs font-thin m-1  outline-none " @click="requestBtnFunc" :class="requestBtnDisable">
+                        <button  class="p-2 hover:shadow-lg text-xs font-thin m-1  outline-none " @click="requestBtnFunc" :class="requestBtnDisable" data-test="btn-text">
                             {{requestBtnText}}
                         </button>
                     </td>

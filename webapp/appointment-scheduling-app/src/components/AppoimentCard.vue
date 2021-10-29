@@ -67,7 +67,7 @@
                 </tr>
             </tbody>
             <AppoimentSlot v-for="(ele,index) in slotListOfService" :approved="ele.approved" 
-            :approveFunc="()=>approveSlot(ele.slotId)" :clientEmail="ele.clientEmail" :clientName="ele.clientName" :clientRequested="ele.clientRequested" :removeFunc="()=>removeSlot(ele.slotId)" :time="ele.time" :key="index"/>
+            :approveFunc="()=>approveSlot(ele.slotId)" :clientEmail="ele.clientEmail" :clientName="ele.clientName" :clientRequested="ele.clientRequested" :removeFunc="()=>removeSlot(ele.slotId)" :time="ele.time" :key="index" data-test="appoiment-card"/>
         </table>
     </div>
 </div>
