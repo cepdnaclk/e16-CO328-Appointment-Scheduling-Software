@@ -8,7 +8,9 @@
     </div>
     </transition>
     <div class="rounded-full h-12 w-12 flex  border-none">
-    <button class="shadow-2xl m-1 rounded-full h-12 w-12  text-white bg-gradient-to-r from-red-800 to-pink-800 hover:from-pink-500 hover:to-yellow-500 p-3 outline-none fab" @click="show=!show">{{getActivePerson}}</button>
+    <button class="shadow-2xl m-1 rounded-full h-12 w-12  text-white bg-gradient-to-r from-red-800 to-pink-800 hover:from-pink-500 hover:to-yellow-500 p-3 outline-none fab" @click="show=!show"
+    data-test="active-btn"
+    >{{getActivePerson}}</button>
      </div>
 </div>
 </div>

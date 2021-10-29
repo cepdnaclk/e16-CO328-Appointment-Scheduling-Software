@@ -16,7 +16,7 @@
                 <h3 class="hidden md:block font-bold text-2xl text-gray-700">{{serviceName}}</h3>
                 <p class="text-gray-600 text-justify">{{servicOwnerEmail}}</p>
                 <p class="text-gray-600 text-justify">{{discription}}</p>
-                <p class="text-green-600 text-justify">{{getStatus}}</p>
+                <p class="text-green-600 text-justify" data-test="status">{{getStatus}}</p>
                 <button class="flex items-baseline mt-3 text-red-600 hover:text-red-900 focus:text-blue-900 outline-none" @click="onPressCancel">
                     <span>CANCEL REQUEST</span>
                     <span class="text-xs ml-1">&#x279c;</span>

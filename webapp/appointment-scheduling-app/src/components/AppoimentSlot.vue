@@ -1,14 +1,14 @@
  <template>
    <tr class="bg-gray-100 text-center border-b text-sm text-gray-600">
                     <td class="p-2 border-r">{{time}}</td>
-                    <td class="p-2 border-r">{{clientRequested ?clientName:""}}</td>
-                    <td class="p-2 border-r">{{clientRequested ?clientEmail:""}}</td>
-                    <td class="p-2 border-r">{{status}}</td>
+                    <td class="p-2 border-r" data-test="clientName">{{clientRequested ?clientName:""}}</td>
+                    <td class="p-2 border-r" data-test="clientEmail">{{clientRequested ?clientEmail:""}}</td>
+                    <td class="p-2 border-r" data-test="status">{{status}}</td>
                     <td>
-                        <button  class="p-2 hover:shadow-lg text-xs font-thin m-1  outline-none " @click="approveBtnFunc" :class="approveDisable">
+                        <button  class="p-2 hover:shadow-lg text-xs font-thin m-1  outline-none " @click="approveBtnFunc" :class="approveDisable" data-test="approveBtn">
                             {{approveBtnText}}
                         </button>
-                        <button href="#" class=" p-2  hover:shadow-lg text-xs font-thin m-1  outline-none" @click="removeBtnFunc" :class="removeDisable">Remove</button>
+                        <button href="#" class=" p-2  hover:shadow-lg text-xs font-thin m-1  outline-none" @click="removeBtnFunc" :class="removeDisable" data-test="removeBtn">Remove</button>
                     </td>
     </tr>
  </template>
